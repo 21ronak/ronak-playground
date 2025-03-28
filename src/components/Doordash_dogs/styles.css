@@ -1,0 +1,41 @@
+body,
+html {
+  font-family: system, -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+    "Lucida Grande";
+  background: white;
+  padding: 1rem;
+  line-height: 1.6;
+}
+
+.nav-btns {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.nav-btn {
+  height: 45px;
+  width: 45px;
+  flex-shrink: 0;
+}
+
+.img-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.dog-img {
+  height: 300px;
+}
+
+li {
+  list-style: none;
+}
+
+.comments {
+  display: flex;
+  justify-content: center;
+}
