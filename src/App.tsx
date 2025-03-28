@@ -11,6 +11,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Home from './Home';
 import SignupForm from './components/SignUpForm_reducer';
 import PollApp from './components/PollingApp';
+import Dogs from './components/Doordash_dogs';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/Marketplace" element={<Marketplace />} />
           <Route path="/SignupForm" element={<SignupForm />} />
           <Route path="/PollApp" element={<PollApp />} />
+          <Route path="/DoordashDogs" element={<Dogs />} />
         </Routes>
       </Router>
     </div>

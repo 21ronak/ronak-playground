@@ -15,6 +15,7 @@ const Home = () => {
         <li><Link to="/Marketplace">Marketplace</Link></li>
         <li><Link to="/SignupForm">SignupForm</Link></li>
         <li><Link to="/PollApp">PollApp</Link></li>
+        <li><Link to="/DoordashDogs">Doordash Dogs</Link></li>
       </ul>
     </div>
   );
