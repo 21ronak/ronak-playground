@@ -12,6 +12,9 @@ import Home from './Home';
 import SignupForm from './components/SignUpForm_reducer';
 import PollApp from './components/PollingApp';
 import Dogs from './components/Doordash_dogs';
+import DogsCarousal from './components/Doordash_dogs/Carousal/DogsCarousal';
+import DoordashUI from './components/Doordash_UI/App';
+import DogBreedsList from './components/DogBreedsList';
 
 function App() {
   return (
@@ -31,6 +34,9 @@ function App() {
           <Route path="/SignupForm" element={<SignupForm />} />
           <Route path="/PollApp" element={<PollApp />} />
           <Route path="/DoordashDogs" element={<Dogs />} />
+          <Route path="/DogsCarousal" element={<DogsCarousal />} />
+          <Route path="/DoordashUI" element={<DoordashUI />} />
+          <Route path="/DogBreedsList" element={<DogBreedsList />} />
         </Routes>
       </Router>
     </div>

@@ -1,0 +1,24 @@
+.slideshow {
+  text-align: center;
+  padding: 1rem;
+  max-width: 800px;
+  margin: auto;
+}
+
+img {
+  max-width: 100%;
+  max-height: 500px;
+  border-radius: 10px;
+  margin: 1rem 0;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.controls button {
+  margin: 0 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
+
+.settings {
+  margin-top: 1rem;
+}
