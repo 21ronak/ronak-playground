@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { getDogs } from "./api";
 import "./app.css";
 
@@ -23,13 +23,13 @@ const DogsCarousal = () => {
     });
   }, [length]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setCurrent((prev) => (prev + 1) % dogs.length);
-  };
+  }, [dogs.length]);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     setCurrent((prev) => (prev - 1 + dogs.length) % dogs.length);
-  };
+  }, [dogs.length]);
 
   // 👇 Keyboard navigation
   useEffect(() => {
@@ -43,7 +43,7 @@ const DogsCarousal = () => {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [dogs]);
+  }, [handleNext, handlePrev]);
 
   if (loading) return <p>Loading puppers...</p>;
   if (error) return <p>Something went wrong while fetching dog images. 🐶💥</p>;
@@ -56,6 +56,7 @@ const DogsCarousal = () => {
         <button onClick={handlePrev} disabled={dogs.length === 0}>Previous</button>
         <button onClick={handleNext} disabled={dogs.length === 0}>Next</button>
       </div>
+      <p>{current + 1} of {dogs.length}</p>
       <div className="settings">
         <label>
           Show top&nbsp;

@@ -17,8 +17,10 @@ const Home = () => {
         <li><Link to="/PollApp">PollApp</Link></li>
         <li><Link to="/DoordashDogs">Doordash Dogs</Link></li>
         <li><Link to="/DogsCarousal">My Dogs Carousal</Link></li>
+        <li><Link to="/DogsCarousalWithComments">DogsCarousal With Comments</Link></li>
         <li><Link to="/DoordashUI">Doordash UI</Link></li>
         <li><Link to="/DogBreedsList">DogBreedsList</Link></li>
+        <li><Link to="/SeatBooking">SeatBooking</Link></li>
       </ul>
     </div>
   );

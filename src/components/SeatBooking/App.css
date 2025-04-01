@@ -1,0 +1,89 @@
+.app {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.seat-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.seat-row {
+  display: flex;
+  gap: 5px;
+  margin: 2px 0;
+}
+
+.seat {
+  width: 40px;
+  height: 40px;
+  border: 2px solid red;
+  background-color: white;
+  cursor: pointer;
+  font-weight: bold;
+  color: black;
+  transition: background-color 0.2s ease;
+}
+
+.seat.selected {
+  background-color: lightblue;
+  border-color: blue;
+}
+
+.seat.booked {
+  background-color: gray;
+  border-color: darkgray;
+  color: white;
+  cursor: not-allowed;
+}
+
+.seat:hover {
+  background-color: #e0f7fa;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn {
+  padding: 10px 20px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn.book {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn.clear {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn.reset {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.status-info {
+  text-align: center;
+  margin: 20px auto;
+  font-family: sans-serif;
+}
+
+.status-info h4 {
+  margin: 10px 0 5px;
+}
+
+.status-info p {
+  margin: 0 0 10px;
+  font-weight: bold;
+  color: #333;
+}
