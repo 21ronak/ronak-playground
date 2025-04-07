@@ -15,18 +15,20 @@ const TodoList = () => {
   const [newTask, setNewTask] = useState('');
   const [tasks, setTasks] = useState(INITIAL_TASKS);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (newTask.trim() === '') {
+      return;
+    }
+    setTasks([...tasks, {id: newID(), label: newTask}]);
+    setNewTask('');
+  };
+
   return (
     <div>
       <Link to="/">Back to Home</Link>
       <h1>Todo List</h1>
-      <form onSubmit={(event) => {
-          event.preventDefault();
-          if (newTask.trim() === '') {
-            return;
-          }
-          setTasks([...tasks, {id: newID(), label: newTask}]);
-          setNewTask('');
-        }}>
+      <form onSubmit={handleSubmit}>
         <div>
           <input
             type="text"

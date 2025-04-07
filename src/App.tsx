@@ -17,6 +17,7 @@ import DogsCarousalWithComments from './components/Doordash_dogs/Carousal/DogsCa
 import DoordashUI from './components/Doordash_UI/App';
 import DogBreedsList from './components/DogBreedsList';
 import SeatBooking from './components/SeatBooking/SeatBooking';
+import PlayerTable from './components/TableSorting';
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
           <Route path="/DoordashUI" element={<DoordashUI />} />
           <Route path="/DogBreedsList" element={<DogBreedsList />} />
           <Route path="/SeatBooking" element={<SeatBooking />} />
+          <Route path="/PlayerTable" element={<PlayerTable />} />
         </Routes>
       </Router>
     </div>
