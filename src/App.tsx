@@ -18,6 +18,7 @@ import DoordashUI from './components/Doordash_UI/App';
 import DogBreedsList from './components/DogBreedsList';
 import SeatBooking from './components/SeatBooking/SeatBooking';
 import PlayerTable from './components/TableSorting';
+import VirtualizedList from './components/VirtualizedList';
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
           <Route path="/DogBreedsList" element={<DogBreedsList />} />
           <Route path="/SeatBooking" element={<SeatBooking />} />
           <Route path="/PlayerTable" element={<PlayerTable />} />
+          <Route path="/VirtualizedList" element={<VirtualizedList />} />
         </Routes>
       </Router>
     </div>
