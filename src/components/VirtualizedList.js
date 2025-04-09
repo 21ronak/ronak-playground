@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 
+// GENIUS FUCKING COMPONENT, Chef's Kiss!
+
 // Generate default list items for demonstration
 const defaultItems = new Array(1000)
   .fill(null)
@@ -32,7 +34,7 @@ const VirtualizedList = ({ items = defaultItems, itemHeight = 50 }) => {
 
     // Attach scroll event listener and perform initial calculation.
     const container = containerRef.current;
-    container.addEventListener("scroll", handleScroll);
+    container.addEventListener("scroll", handleScroll); // Add THROTTLE for Perf
     handleScroll();
 
     return () => container.removeEventListener("scroll", handleScroll);

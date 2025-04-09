@@ -23,6 +23,7 @@ const Home = () => {
         <li><Link to="/SeatBooking">SeatBooking</Link></li>
         <li><Link to="/PlayerTable">PlayerTableSort</Link></li>
         <li><Link to="/VirtualizedList">VirtualizedList</Link></li>
+        <li><Link to="/TableGrid">TableGrid</Link></li>
       </ul>
     </div>
   );

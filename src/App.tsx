@@ -19,6 +19,7 @@ import DogBreedsList from './components/DogBreedsList';
 import SeatBooking from './components/SeatBooking/SeatBooking';
 import PlayerTable from './components/TableSorting';
 import VirtualizedList from './components/VirtualizedList';
+import TableGrid from './components/TableGrid';
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route path="/SeatBooking" element={<SeatBooking />} />
           <Route path="/PlayerTable" element={<PlayerTable />} />
           <Route path="/VirtualizedList" element={<VirtualizedList />} />
+          <Route path="/TableGrid" element={<TableGrid />} />
         </Routes>
       </Router>
     </div>
