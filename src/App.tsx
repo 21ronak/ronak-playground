@@ -20,6 +20,7 @@ import SeatBooking from './components/SeatBooking/SeatBooking';
 import PlayerTable from './components/TableSorting';
 import VirtualizedList from './components/VirtualizedList';
 import TableGrid from './components/TableGrid';
+import Stopwatch from './components/StopWatch';
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
           <Route path="/PlayerTable" element={<PlayerTable />} />
           <Route path="/VirtualizedList" element={<VirtualizedList />} />
           <Route path="/TableGrid" element={<TableGrid />} />
+          <Route path="/Stopwatch" element={<Stopwatch />} />
         </Routes>
       </Router>
     </div>

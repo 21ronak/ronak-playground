@@ -24,6 +24,7 @@ const Home = () => {
         <li><Link to="/PlayerTable">PlayerTableSort</Link></li>
         <li><Link to="/VirtualizedList">VirtualizedList</Link></li>
         <li><Link to="/TableGrid">TableGrid</Link></li>
+        <li><Link to="/Stopwatch">Stopwatch</Link></li>
       </ul>
     </div>
   );
