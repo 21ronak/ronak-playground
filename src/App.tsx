@@ -21,6 +21,7 @@ import PlayerTable from './components/TableSorting';
 import VirtualizedList from './components/VirtualizedList';
 import TableGrid from './components/TableGrid';
 import Stopwatch from './components/StopWatch';
+import CarousalTest from './components/Doordash_dogs/Carousal/CarousalTest';
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
           <Route path="/DogsCarousal" element={<DogsCarousal />} />
           <Route path="/DogsCarousalWithComments" element={<DogsCarousalWithComments />} />
           <Route path="/DoordashUI" element={<DoordashUI />} />
+          <Route path="/CarousalTest" element={<CarousalTest />} />
           <Route path="/DogBreedsList" element={<DogBreedsList />} />
           <Route path="/SeatBooking" element={<SeatBooking />} />
           <Route path="/PlayerTable" element={<PlayerTable />} />
