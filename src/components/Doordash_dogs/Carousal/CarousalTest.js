@@ -15,7 +15,7 @@ const CarousalTest = () => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [newComment, setNewComment] = useState('');
-  const [comments, setComments] = useState({});
+  const [comments, setComments] = useState(JSON.parse(localStorage.getItem('comments') || {}));
 
   const getNextID = useIDGenerator();
 
@@ -78,6 +78,10 @@ const CarousalTest = () => {
   useEffect(() => {
     fetchDogs();
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('comments', JSON.stringify(comments));
+  }, [comments]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
