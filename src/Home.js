@@ -26,6 +26,8 @@ const Home = () => {
         <li><Link to="/VirtualizedList">VirtualizedList</Link></li>
         <li><Link to="/TableGrid">TableGrid</Link></li>
         <li><Link to="/Stopwatch">Stopwatch</Link></li>
+        <li><Link to="/WeatherWidget">WeatherWidget</Link></li>
+        <li><Link to="/AutoComplete">AutoComplete</Link></li>
       </ul>
     </div>
   );

@@ -22,6 +22,8 @@ import VirtualizedList from './components/VirtualizedList';
 import TableGrid from './components/TableGrid';
 import Stopwatch from './components/StopWatch';
 import CarousalTest from './components/Doordash_dogs/Carousal/CarousalTest';
+import WeatherWidget from './components/LocalWeatherAPI';
+import AutoComplete from './components/AutoComplete';
 
 function App() {
   return (
@@ -51,6 +53,8 @@ function App() {
           <Route path="/VirtualizedList" element={<VirtualizedList />} />
           <Route path="/TableGrid" element={<TableGrid />} />
           <Route path="/Stopwatch" element={<Stopwatch />} />
+          <Route path="/WeatherWidget" element={<WeatherWidget />} />
+          <Route path="/AutoComplete" element={<AutoComplete />} />
         </Routes>
       </Router>
     </div>
