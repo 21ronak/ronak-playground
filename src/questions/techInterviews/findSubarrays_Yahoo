@@ -1,0 +1,28 @@
+function findSubarrays(arr, target) {
+  const subarrays = [];
+
+  // Iterate over each starting index of the subarray
+  for (let start = 0; start < arr.length; start++) {
+    let product = 1;
+    // Extend the subarray from the current starting point
+    for (let end = start; end < arr.length; end++) {
+      product *= arr[end];
+      // If the current product is less than target, add the subarray
+      if (product < target) {
+        subarrays.push(arr.slice(start, end + 1));
+      } else {
+        // Once the product reaches or exceeds the target, break out of the inner loop
+        break;
+      }
+    }
+  }
+
+  return subarrays;
+}
+
+// Test the function with the given input
+const arr = [1, 2, 3, 4];
+const target = 4;
+const result = findSubarrays(arr, target);
+console.log(result);
+// Expected output: [ [1], [1, 2], [2], [3] ]

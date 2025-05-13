@@ -1,0 +1,26 @@
+function createAsyncMemoizer(asyncFn) {
+  const cache = new Map();
+
+  return (...args) => {
+    // You can replace with a better serializer if needed
+    const key = JSON.stringify(args);
+
+    if (!cache.has(key)) {
+      const promise = asyncFn(...args)
+        .then(result => {
+          // Cache resolved result
+          cache.set(key, Promise.resolve(result));
+          return result;
+        })
+        .catch(err => {
+          // Remove on error to allow retries
+          cache.delete(key);
+          throw err;
+        });
+
+      cache.set(key, promise);
+    }
+
+    return cache.get(key);
+  };
+}

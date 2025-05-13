@@ -1,0 +1,125 @@
+import React, { useCallback, useState } from "react";
+
+import "./App.css";
+
+// -- WELCOME! --
+// Rippling is working on a flexible “Form” component as
+// part of a larger component library that allows app developers
+// to quickly stand up forms for their different needs. This
+// component should be flexible enough to handle different views
+// from developers across our company.
+// Let’s build a quick prototype of that Form component today.
+// -- END PROMPT! --
+
+// Part 1: Form Schema Definition
+// How would the interface for a form look? Be sure to cover use
+// cases like different field types and validations.
+
+// formSchema = {inputFields: [], dropdowns: []}
+const formSchema = [
+  {
+    name: 'firstName',
+    label: 'firstName',
+    type: 'text',
+    validation : {
+      required: true,
+      errorMessage: 'First name is required'
+    }
+  },
+  {
+    name: 'lastName',
+    label: 'lastName',
+    type: 'text',
+    validation : {
+      required: true,
+      errorMessage: 'Last name is required'
+    }
+  },
+  {
+    name: 'email',
+    label: 'email',
+    type: 'email',
+    validation : {
+      required: true,
+      errorMessage: 'Email address is required'
+    }
+  },
+  {
+    name: 'password',
+    label: 'password',
+    type: 'password',
+    validation : {
+      required: true,
+      errorMessage: 'Password is required'
+    }
+  },
+  {
+    name: 'phone',
+    label: 'phone',
+    type: 'number',
+    validation : {
+      required: true,
+      errorMessage: 'Phone is required',
+      minimum: 6,
+      maximum: 10
+    }
+  },
+]
+
+const reducer = (state, action) => {
+  switch(action.type) {
+    case `SET_FIELD`: {
+      return {...state, [action.field]: [action.value]}
+    }
+    default:
+      return {
+        ...state
+      }
+  }
+
+};
+
+
+// Part 2: Let's build our form component
+// Let's try to hit a few of the use cases from above
+const CustomForm = ({ formSchema, onSubmit }) => {
+  const inputFields = formSchema;
+  // const inputTypes = ['text', 'password', 'number', 'email'];
+  //const [firstName, setFirstName] = React.useState('');
+  const [state, dispatch] = React.useReducer(reducer, formSchema);
+
+  return (
+    <form onSubmit={onSubmit}>
+      {inputFields.length && inputFields.map((field) => {
+        return (
+          <div className="input-wrapper">
+            <label htmlFor={field.name}>{field.label}</label>
+            <input type={field.type} name={field.name} value={`${state}.${field.name}`}
+              onChange={(e) => dispatch({type: `SET_FIELD`, action: {}})}>
+            </input>
+          </div>
+        )
+      })}
+      <button>Submit</button>
+    </form>
+  );
+
+};
+
+const App = () => {
+  const onSubmit = useCallback((obj) => {
+
+  }, []);
+
+  return (
+    <div className="page-container">
+      <div className="main-container">
+        <div className="form-container">
+          <CustomForm formSchema={formSchema} onSubmit={onSubmit} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default App;

@@ -1,0 +1,65 @@
+export default class EventEmitter {
+  constructor() {
+    // Avoid creating objects via `{}` to exclude unwanted properties
+    // on the prototype (such as `.toString`).
+    this.events = Object.create(null);
+  }
+
+  /**
+   * @param {string} eventName
+   * @param {Function} listener
+   * @returns {EventEmitter}
+   */
+  on(eventName, listener) {
+    if(!Object.hasOwn(this.events, eventName)) {
+      this.events[eventName] = [];
+    }
+
+    this.events[eventName].push(listener);
+    return this;
+  }
+
+  /**
+   * @param {string} eventName
+   * @param {Function} listener
+   * @returns {EventEmitter}
+   */
+  off(eventName, listener) {
+    if(!Object.hasOwn(this.events, eventName)) {
+      return this;
+    }
+
+    const listeners = this.events[eventName];
+
+    // Find only first instance of the listener.
+    const index = listeners.findIndex((listenerItem) => listenerItem === listener);
+    if(index < 0) {
+      return this;
+    }
+
+    this.events[eventName].splice(index, 1);
+    //this.events[eventName] = listeners.filter((item) => item !== listener);
+    // Doesn't work for same listener added multiple times removed correctly
+    return this;
+  }
+
+  /**
+   * @param {string} eventName
+   * @param  {...any} args
+   * @returns {boolean}
+   */
+  emit(eventName, ...args) {
+    if(!Object.hasOwn(this.events, eventName) || this.events[eventName].length === 0) {
+      return false;
+    }
+
+    // Make a clone of the listeners in case one of the listeners
+    // mutates this listener array.
+    const listeners = this.events[eventName].slice();
+    listeners.forEach((listener) => {
+      listener.apply(this, args);
+    });
+
+    return true;
+  }
+}

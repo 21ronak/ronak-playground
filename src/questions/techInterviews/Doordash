@@ -1,0 +1,207 @@
+// req is the request object of the incoming request to this service
+// it may come from another service, or from a client (such as a mobile device
+// or a web browser)
+
+// - common-trace-id: a unique identifier for the HTTP request that is sent as a header on the incoming request
+// - common-timestamp: the time when the outgoing request was fired via the HTTP client
+import { v4 as uuidv4 } from 'uuid';
+
+// logger => id, timestamp, duration, allow-list
+// Map get: [{}], post: [{}]
+
+export class DoorDashHttpClient {
+  isProduction: boolean;
+  allowList: string[];
+  // key, value
+  constructor(args: any) {
+    this.isProduction = args.isProduction;
+    this.allowList = ['content-type', 'test'];
+  }
+
+  handleRequest(method: 'get' | 'post', url: URL, body?: Record<string, any>) {
+    console.log(Date.now());
+    const timestamp = Date.now().toString();
+    return fetch(url, {
+      headers: { 'common-trace-identifier': uuidv4(), 'common-timestamp': timestamp},
+      method,
+    }).then((res) => {
+      const headers = res.headers;
+      const type = headers.get('content-type');
+
+      if(this.allowList.some((item) => headers.get(item))) {
+        console.log(type);
+      }
+
+      const duration = Date.now() - Number(timestamp);
+
+      if(!this.isProduction) {
+        console.log('Duration ', duration);
+      }
+      return res.json()
+    });
+  }
+
+  async get(url: URL, options?: any): Promise<any> {
+    return await this.handleRequest("get", url, undefined);
+  }
+
+  async post(url: URL, body?: Record<string, any>, options?: any) {
+    return await this.handleRequest("post", url, body);
+  }
+}
+
+
+import http from 'http';
+import { DoorDashHttpClient } from "./httpClient"
+
+const DATA_URL = new URL("https://img.cdn4dd.com/s/managed/interview/tps-dogs/api.json");
+
+const isProduction = true // false
+
+http
+  .createServer(async function (req, res) {
+    const client = new DoorDashHttpClient({isProduction});
+    console.log("Making API Request");
+    const response = await client.get(DATA_URL);
+    console.log(response.data.children.length, Date.now());
+    res.write(`Found ${response.data.children.length} posts`);
+    res.write(`\n${Date.now()}`);
+    res.end();
+  })
+  .listen(8080);
+
+
+  # Web Platform HTTP Client Assessment
+
+## Context
+
+At DoorDash, we are leveraging a microservices-based architecture. We have microservices talking with each other using HTTP or GRPC. We also have a few well-known headers that most backend services require.
+
+To help reduce duplication across teams, we'd like to build an HTTP client that comes with the defaults that makes the most sense for DoorDash services.
+
+## Exercise
+
+Update our stubbed HTTP client to include the following default headers on every request:
+
+- common-trace-id: a unique identifier for the HTTP request that is sent as a header on the incoming request
+
+- common-timestamp: the time when the outgoing request was fired via the HTTP client
+
+## Expectations
+
+This exercise is supposed to reflect a task you might be asked to do in the role. Please ask questions or look up documentation as needed!
+
+## Extensions
+
+Once we have the basic requirements in place, we can discuss and implement extra features that make the client more useful.
+
+### Logging
+
+Collecting standard log information via your HTTP client can help debug issues across services.
+
+- Log response headers, with an allow list to prevent leaking sensitive information
+- Log timing for requests made via the HTTP client
+- Control this logging via a call parameter, so we can enable logging for debugging and disable it in production
+
+### Classless client support
+
+The stubbed HTTP client is created with a request, to read the trace id from. This means we need to create a new client for every incoming request.
+
+- Update the HTTP client to take the incoming request as a call option
+- Update the HTTP client module to export functions instead of a class constructor
+
+### Error handling
+
+Our example request is unlikely to fail, but real requests will.
+
+- Update the HTTP client to handle 4xx status codes by returning a readable error message to the caller
+- Update the HTTP client to handle 5xx status codes by logging an internal error and returning the trace id to the caller
+
+
+
+
+/// Final expected Answer
+
+import { v4 as uuidv4 } from 'uuid';
+
+export class DoorDashHttpClient {
+  isProduction: boolean;
+  allowList: string[];
+
+  constructor(args: { isProduction: boolean }) {
+    this.isProduction = args.isProduction;
+    this.allowList = ['content-type', 'x-request-id', 'test'];
+  }
+
+  private getDefaultHeaders(incomingReq?: any) {
+    const traceId = incomingReq?.headers?.['common-trace-id'] || uuidv4();
+    const timestamp = Date.now().toString();
+    return {
+      'common-trace-id': traceId,
+      'common-timestamp': timestamp,
+    };
+  }
+
+  private logResponseHeaders(headers: Headers) {
+    for (const key of this.allowList) {
+      const value = headers.get(key);
+      if (value) console.log(`[Header] ${key}: ${value}`);
+    }
+  }
+
+  private async handleRequest(
+    method: 'get' | 'post',
+    url: URL,
+    options: {
+      body?: Record<string, any>;
+      req?: any;
+      log?: boolean;
+    } = {}
+  ) {
+    const { req, body, log = false } = options;
+    const headers: Record<string, string> = this.getDefaultHeaders(req);
+    const timestamp = parseInt(headers['common-timestamp']);
+    if (method === 'post') headers['content-type'] = 'application/json';
+
+    const fetchOptions: RequestInit = {
+      method,
+      headers,
+      ...(method === 'post' && body ? { body: JSON.stringify(body) } : {}),
+    };
+
+    try {
+      const response = await fetch(url, fetchOptions);
+      const duration = Date.now() - timestamp;
+
+      if (log && !this.isProduction) {
+        this.logResponseHeaders(response.headers);
+        console.log(`[Duration] ${duration}ms`);
+      }
+
+      if (!response.ok) {
+        const traceId = headers['common-trace-id'];
+        if (response.status >= 500) {
+          console.error(`5xx Error. Trace ID: ${traceId}`);
+          return { error: 'Internal server error', traceId, status: response.status };
+        } else {
+          return { error: response.statusText, status: response.status };
+        }
+      }
+
+      return await response.json();
+    } catch (err) {
+      return {
+        error: 'Network error',
+        traceId: headers['common-trace-id'],
+      };
+    }
+  }
+
+  async get(url: URL, options: { req?: any; log?: boolean } = {}) {
+    return this.handleRequest('get', url, options);
+  }
+
+  async post(url: URL, body?: Record<string, any>, options: { req?: any; log?: boolean } = {}) {
+    return this.handleRequest('post', url, { ...options, body });
+  }
+}

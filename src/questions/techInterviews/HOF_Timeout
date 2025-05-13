@@ -1,0 +1,40 @@
+/*
+Implement a higher-order function (HOF) that takes two arguments:
+
+A function (to be executed)
+A timer threshold
+The returned function should execute the given function only if it completes within the specified time limit. Otherwise, it should reject.
+*/
+
+function withTimeout(fn, timeLimitMs) {
+  return async function (...args) {
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => {
+        reject(new Error(`Function timed out after ${timeLimitMs}ms`));
+      }, timeLimitMs);
+
+      fn(...args)
+        .then((result) => {
+          clearTimeout(timer);
+          resolve(result);
+        })
+        .catch((err) => {
+          clearTimeout(timer);
+          reject(err);
+        });
+    });
+  };
+}
+
+
+// A sample async function
+const fetchData = async () => {
+  await new Promise((res) => setTimeout(res, 1500)); // Simulate delay
+  return 'Data loaded';
+};
+
+const safeFetch = withTimeout(fetchData, 1000);
+
+safeFetch()
+  .then(console.log)
+  .catch(console.error); // ❌ Will reject due to timeout

@@ -1,0 +1,28 @@
+function memoizeLRU(func, maxSize = 5) {
+  const cache = new Map();
+
+  return function (...args) {
+    const key = JSON.stringify(args);
+
+    if (cache.has(key)) {
+      // Move key to end to show it's recently used
+      const value = cache.get(key);
+      cache.delete(key);
+      cache.set(key, value);
+      return value;
+    }
+
+    const result = func.apply(this, args);
+
+    // Add new result to cache
+    cache.set(key, result);
+
+    // If over limit, remove least recently used
+    if (cache.size > maxSize) {
+      const oldestKey = cache.keys().next().value;
+      cache.delete(oldestKey);
+    }
+
+    return result;
+  };
+}

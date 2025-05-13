@@ -1,0 +1,164 @@
+const _ = require('lodash');
+
+function sayHello() {
+  console.log('Hello, World');
+}
+
+_.times(5, sayHello);
+
+
+// Your previous Plain Text content is preserved below:
+
+// Welcome to Meta!
+
+// This is just a simple shared plaintext pad, with no execution capabilities.
+
+// When you know what language you would like to use for your interview,
+// simply choose it from the dropdown in the left bar.
+
+// Enjoy your interview!
+
+/*
+Write a function that, given a binary tree of integers, returns the sums of all the root-to-leaf paths.
+
+
+Example
+
+
+
+Input:
+         2
+        / \
+       3   5
+     /  \
+    1    5
+Node
+ val
+ left
+ right
+
+Output:
+[6, 10, 7]
+*/
+
+const sumPaths = (root) => {
+  const current = root;
+  let result = [];
+
+  function findSum(node, sum) {
+    if(node === null) return;
+
+    sum += node.val;
+
+    if(node.left) findSum(node.left, sum);
+    if(node.right) findSum(node.right, sum);
+
+    if(node.left === null & node.right === null) {
+      result.push(sum);
+      sum -= node.val;
+    }
+  }
+
+  findSum(current, 0);
+  return result;
+};
+
+const input = []
+console.log(sumPaths(input));
+
+
+SOLUTION:
+function rootToLeafSums(root) {
+  const sums = [];
+
+  function traverse(node, currentSum) {
+    if (node === null) return;
+
+    // Add current node's value to the running sum.
+    currentSum += node.val;
+
+    // If the current node is a leaf, push the sum to the results.
+    if (node.left === null && node.right === null) {
+      sums.push(currentSum);
+      return;
+    }
+
+    // Continue traversing left and right subtrees.
+    traverse(node.left, currentSum);
+    traverse(node.right, currentSum);
+  }
+
+  traverse(root, 0);
+  return sums;
+}
+
+/*
+
+Given an array of integers, find any one local minimum from the array. A local minimum is defined as an integer in the array that is less than or equal to its neighbors.
+
+
+[15, 9, 7, 15, 20, 6, 12]
+[5]
+
+*/
+
+const findLocalMinimum = (input) => {
+  let result = [];
+  let n = input.length;
+
+  if(n === 0) {
+    return;
+  }
+  if(n === 1) {
+    return input[0];
+  }
+
+  if(n > 1 && input[0] =< input[1]) {
+    return input[0];
+  }
+
+  if(n > 1 && input[n-1] =< input[n - 2]) {
+    return input[n - 1];
+  }
+
+  for(let i=1; i < n - 2; i++) {
+    if((input[i-1] >= input[i]) && (input[i+1] >= input[i])) {
+      return input[i];
+    }
+  }
+
+  return null;
+}
+
+
+optimized soln:
+function findLocalMinimum(arr) {
+  if (!Array.isArray(arr) || arr.length === 0) return null;
+
+  const n = arr.length;
+  if (n === 1 || arr[0] < arr[1]) return arr[0];
+  if (arr[n - 1] < arr[n - 2]) return arr[n - 1];
+
+  let low = 1;
+  let high = n - 2;
+
+  while (low <= high) {
+    const mid = Math.floor((low + high) / 2);
+
+    // Check if the mid element is a local minimum
+    if (arr[mid] < arr[mid - 1] && arr[mid] < arr[mid + 1]) {
+      return arr[mid];
+    }
+    // If the left neighbor is less than mid, a local minimum must exist in the left half
+    else if (arr[mid - 1] < arr[mid]) {
+      high = mid - 1;
+    }
+    // Otherwise, if the right neighbor is less than mid, a local minimum exists in the right half
+    else {
+      low = mid + 1;
+    }
+  }
+
+  // Should never reach here if a local minimum exists
+  return null;
+}

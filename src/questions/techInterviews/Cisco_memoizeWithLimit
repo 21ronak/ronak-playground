@@ -1,0 +1,75 @@
+// Memoize
+// =======
+//
+// Given a very expensive function, generate a function to improve
+// performance by not calling the very expensive function if the
+// received values have already been processed before.
+//
+// Example
+// -------
+// memoizedExpFunction(1, 2)
+// --> Calling veryExpensiveFunction
+// --> 3
+// memoizedExpFunction(1, 2)
+// --> 3
+
+// Abstract - Do not modify
+function veryExpensiveFunction(a, b) {
+  console.log('Calling veryExpensiveFunction');
+  return a + b;
+}
+
+// (key: func, count)
+
+function memoize(func) {
+  const map = new Map();
+
+  return function(...args) {
+    const key = JSON.stringify(args);
+
+    if(map.has(key) && map.get(key).count < 5) {
+      const cachedResult = map.get(key);
+
+      map.set(key, {...cachedResult, count: map.get(key).count + 1});
+
+      return map.get(key).result;
+    }
+
+    const result = func.call(this, ...args);
+    map.set(key, { result, count: 1 });
+
+    return result;
+  };
+}
+
+const memoizedExpFunction = memoize(veryExpensiveFunction);
+
+console.log(memoizedExpFunction(1, 2)); // 1st (1, 2)
+// Calling veryExpensiveFunction
+// 3
+
+console.log(memoizedExpFunction(1, 2)); // 2nd (1, 2)
+// 3
+
+console.log(memoizedExpFunction(3, 4)); // 1st (3, 4)
+// Calling veryExpensiveFunction
+// 7
+
+console.log(memoizedExpFunction(1, 2)); // 3rd (1, 2)
+// 3
+
+console.log(memoizedExpFunction(1, 2)); // 4rd (1, 2)
+// 3
+
+console.log(memoizedExpFunction(1, 2)); // 5th (1, 2)
+// 3
+
+console.log(memoizedExpFunction(1, 2)); // 6th - Reset Count
+// Calling veryExpensiveFunction
+// 3
+
+console.log(memoizedExpFunction(3, 4)); // 2nd (3, 4)
+// 7
+
+console.log(memoizedExpFunction(1, 2)); // 7th (1, 2)
+// 3

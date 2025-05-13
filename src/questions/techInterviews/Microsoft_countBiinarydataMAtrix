@@ -1,0 +1,104 @@
+/**
+ * Counts how many columns are all 1s (vertical alignment)
+ * and how many top‑left→bottom‑right diagonals of full height are all 1s.
+ *
+ * @param {number[][]} matrix – 2D array of 0s and 1s
+ * @returns {{ vertical: number, diagonal: number }}
+ *   vertical: count of columns where every row has a 1
+ *   diagonal: count of diagonals (length = number of rows) from row 0 that are all 1s
+ */
+function countVerticalAndDiagonalOnes(matrix) {
+  const R = matrix.length;
+  if (R === 0) return { vertical: 0, diagonal: 0 };
+
+  const C = matrix[0].length;
+  let vertical = 0;
+  let diagonal = 0;
+
+  // Count fully‑1 columns
+  for (let col = 0; col < C; col++) {
+    let allOnes = true;
+    for (let row = 0; row < R; row++) {
+      if (matrix[row][col] !== 1) {
+        allOnes = false;
+        break;
+      }
+    }
+    if (allOnes) vertical++;
+  }
+
+  // Count full‑height diagonals (only those that fit within the width)
+  // A diagonal starting at (0, col) spans positions (i, col + i) for i in [0..R-1]
+  for (let startCol = 0; startCol <= C - R; startCol++) {
+    let allOnes = true;
+    for (let row = 0; row < R; row++) {
+      if (matrix[row][startCol + row] !== 1) {
+        allOnes = false;
+        break;
+      }
+    }
+    if (allOnes) diagonal++;
+  }
+
+  return { vertical, diagonal };
+}
+
+// Example
+const mat = [
+  [1, 0, 1, 1, 1],
+  [1, 1, 1, 1, 1],
+  [1, 0, 1, 1, 1]
+];
+
+console.log(countVerticalAndDiagonalOnes(mat));
+// → { vertical: 2, diagonal: 1 }
+// vertical = columns 2 and 3 are all 1s
+// diagonal = only the one starting at col=2 (positions [0,2], [1,3], [2,4]) is all 1s
+
+
+/**
+ * Counts columns of all 1s and full‑height top‑left→bottom‑right diagonals in one pass.
+ * @param {number[][]} matrix - 2D array of 0s and 1s
+ * @returns {{ vertical: number, diagonal: number }}
+ */
+function countVerticalAndDiagonalOnes(matrix) {
+  const R = matrix.length;
+  if (R === 0) return { vertical: 0, diagonal: 0 };
+  const C = matrix[0].length;
+
+  let vertical = 0;
+  let diagonal = 0;
+
+  for (let startCol = 0; startCol < C; startCol++) {
+    let colAllOnes = true;
+    // only consider a full-height diagonal if it fits
+    let diagAllOnes = startCol <= C - R;
+
+    for (let row = 0; row < R; row++) {
+      // vertical check
+      if (colAllOnes && matrix[row][startCol] !== 1) {
+        colAllOnes = false;
+      }
+      // diagonal check
+      if (diagAllOnes && matrix[row][startCol + row] !== 1) {
+        diagAllOnes = false;
+      }
+      // early exit if neither can still be true
+      if (!colAllOnes && !diagAllOnes) break;
+    }
+
+    if (colAllOnes) vertical++;
+    if (diagAllOnes) diagonal++;
+  }
+
+  return { vertical, diagonal };
+}
+
+// Example
+const mat = [
+  [1, 0, 1, 1, 1],
+  [1, 1, 1, 1, 1],
+  [1, 0, 1, 1, 1]
+];
+console.log(countVerticalAndDiagonalOnes(mat));
+// → { vertical: 2, diagonal: 1 }

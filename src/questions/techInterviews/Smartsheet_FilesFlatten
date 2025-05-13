@@ -1,0 +1,58 @@
+
+// Sample data structure
+const _fileSystem = {
+  name: "root",
+  type: "directory",
+  children: [
+    {
+      name: "folder1",
+      type: "directory",
+      children: [
+        { name: "file1.txt", type: "file" },
+        { name: "file2.js", type: "file" },
+        {
+          name: "subfolder1",
+          type: "directory",
+          children: [{ name: "file3.txt", type: "file" }],
+        },
+      ],
+    },
+    {
+      name: "folder2",
+      type: "directory",
+      children: [{ name: "file4.txt", type: "file" }],
+    },
+    {
+      name: "folder3",
+      type: "directory",
+      children:  []
+    },
+    { name: "file5.js", type: "file" },
+  ],
+};
+
+
+// this function should print the full list of file
+// as a flat list, recursively go through all the directories
+function getFileList(root) {
+  let result = [];
+  let node = root;
+
+  if(node.type === 'file') {
+    result.push(node.name);
+  } else if(node.type === 'directory') {
+    node.children.length && node.children.forEach((child) => {
+      result.push(...getFileList(child));
+    });
+  }
+
+  return result;
+}
+
+let results = getFileList(_fileSystem);
+console.log('final output', results);
+// "file1.txt"
+// "file2.js"
+// "file3.txt"
+// "file4.txt"
+// "file5.js"

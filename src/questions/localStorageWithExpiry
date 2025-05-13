@@ -1,0 +1,37 @@
+const localStorageWithExpiry = {
+    set(key, value, ttl) {
+        const now = new Date();
+        const item = {
+            value: value,
+            expiry: now.getTime() + ttl,
+        };
+        localStorage.setItem(key, JSON.stringify(item));
+    },
+
+    get(key) {
+        const itemStr = localStorage.getItem(key);
+        if (!itemStr) {
+            return null;
+        }
+        const item = JSON.parse(itemStr);
+        const now = new Date();
+        if (now.getTime() > item.expiry) {
+            localStorage.removeItem(key);
+            return null;
+        }
+        return item.value;
+    },
+
+    remove(key) {
+        localStorage.removeItem(key);
+    },
+
+    clear() {
+        localStorage.clear();
+    }
+};
+
+// Example usage:
+localStorageWithExpiry.set('user', 'John', 5000); // Set 'user' with a TTL of 5000 milliseconds
+console.log(localStorageWithExpiry.get('user'));  // Get 'user' if not expired
+setTimeout(() => console.log(localStorageWithExpiry.get('user')), 5000); // Try getting 'user' after 5 seconds

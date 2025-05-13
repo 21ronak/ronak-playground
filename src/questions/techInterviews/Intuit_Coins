@@ -1,0 +1,50 @@
+// ## Make Change
+
+// Given an input amount, write a function to return the least number of coins required to make change.
+// To begin, assume the function signature looks like this:
+// `func makeChange(amount: Float) -> ??`
+
+// Example 1:
+
+// - Amount = $0.83
+// - Quarters = 3
+// - Nickels = 1
+// - Pennies = 3
+
+// Example 2:
+
+// - Amount = $0.20
+// - Dimes = 2
+
+// 0.83 * 100 = 83
+const coinsInt = [1, 5, 10, 25];
+
+const coinsFloat = [0.01, 0.05, 0.1, 0.25];
+
+const makeChange = (amount, coins) => {
+    if(amount < 1) {
+        amount = amount * 100;
+    }
+    const dp = new Array(amount + 1).fill(amount + 1);
+    dp[0] = 0;
+
+    for(let i=1; i <= amount; i++) {
+        for(let j=0; j < coins.length; j++) {
+            if(coins[j] <= i) {
+                dp[i] = Math.min(dp[i], dp[i - coins[j]] + 1);
+            }
+        }
+    }
+
+    //console.log(dp);
+    return dp[amount] > amount ? null : dp[amount];
+}
+
+console.log(makeChange(0.25, coinsInt));
+
+
+
+1. How do you stay up to date on AI improvements and innovations?
+2. You are prompting a large language model with the following prompt: "You are a culinary expert. Tell me whether an ingredient belongs in a fruit salad or a vegetable salad." The result will be used by a REST API service. What are some ways you can improve the prompt?
+3. What makes a product AI native? Can you think of an AI native product? How does the product being "AI native" affect the product experience?
+4. You are building a web application. The clickstream will later be consumed by AI systems that will be used to understand the customer experience with the product and improve the product experience. What are some key data attributes that should be recorded in the clickstream? Why record those?

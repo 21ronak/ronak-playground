@@ -1,0 +1,31 @@
+/**
+ * @template T, U
+ * @param {(previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U} callbackFn
+ * @param {U} [initialValue]
+ * @return {Array<U>}
+ */
+Array.prototype.myReduce = function (callbackFn, initialValue) {
+  if(typeof callbackFn !== 'function') {
+    throw new TypeError('Not a function bro');
+  }
+
+  const array = this;
+  let accumulator = initialValue;
+  let startIndex = 0;
+
+  if(accumulator === undefined) {
+    if(array.length === 0) {
+      throw new TypeError('No initial value bro');
+    }
+    accumulator = array[0];
+    startIndex = 1;
+  }
+
+  for(let i = startIndex; i < array.length; i++) {
+    if(Object.hasOwn(array, i)) {
+      accumulator = callbackFn(accumulator, array[i], i, array);
+    }
+  }
+
+  return accumulator;
+};

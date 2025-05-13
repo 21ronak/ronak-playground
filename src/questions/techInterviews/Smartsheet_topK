@@ -1,0 +1,29 @@
+const topN = (inputArray, n) => {
+ const map = new Map();
+
+ for(const char of inputArray) {
+  const newChar = char.toLowerCase();
+  map.set(newChar, (map.get(newChar) || 0) + 1);
+ }
+
+  const sortedArray = Array.from(map.entries()).sort((a, b) => {
+    if(b[1] !== a[1]) return b[1] - a[1];
+
+    return a[0].localeCompare(b[0]);
+  });
+
+  return sortedArray.slice(0, n).map((item) => item[0]);
+}
+
+const input = ["A", "b", "b", "c", "a", "a", "b", "b", "a", "c", "d", "c", "c"];
+const words = [
+  'test',
+  'smart',
+  'qwerty',
+  'seattle',
+  'test',
+  'smart',
+  'seattle',
+  'seattle',
+];
+console.log(topN(input, 2));

@@ -1,0 +1,83 @@
+/**
+ * We have a service that exposes an Echo API: it accepts two parameters {data} and {delay}.
+ * This API responds {data} back to the requester in {delay} milliseconds.
+ *
+ * We're building an SDK for this service.
+ * We want to expose a function named `flowControlledEcho` for SDK users to consume the Echo API.
+ * This function also protects the remote service by controlling the flow: it allows at most 3 concurrent requests on the fly.
+ * Other requests will be queued up until previous requests finish.
+ *
+ * The SDK users can still call flowControlledEcho at unlimited speed.
+ * They won't get any error even when they call the function too frequently, but they'd observe that latter requests take longer to get a response.
+ */
+
+/**
+ * Mock implementation of calling the Echo API.
+ */
+async function echo(data, delay) {
+  return new Promise((resolve,reject) => {
+    setTimeout(() => {
+    if(data === '5') {
+        reject('5 rejected');
+    } else {
+      resolve(data);
+    }
+    }, delay);
+   });
+}
+
+const MAX_CONCURRENT_REQUEST = 3;
+let queue = [];
+let activeRequests = 0;
+
+function processQueue() {
+    if(queue.length === 0 || activeRequests >= MAX_CONCURRENT_REQUEST) return;
+
+    const {data, delay, resolve, reject} = queue.shift();
+    activeRequests++;
+
+    echo(data, delay)
+        .then(resolve)
+        .catch(reject)
+        .finally(() => {
+            activeRequests--;
+            processQueue();
+        })
+}
+
+/**
+ * Implement this function.
+ */
+async function flowControlledEcho(data, delay) {
+
+    return new Promise((resolve, reject) => {
+        const task = {data, delay, resolve, reject};
+
+            queue.push(task);
+            processQueue();
+    });
+}
+
+function main() {
+  const start = Date.now();
+  flowControlledEcho("1", 100).then((data) => {
+    console.log("result 1", data, Date.now() - start); // 1 100
+  });
+  flowControlledEcho("2", 100).then((data) => {
+    console.log("result 2", data, Date.now() - start); // 2 100
+  });
+  flowControlledEcho("3", 100).then((data) => {
+    console.log("result 3", data, Date.now() - start); // 3 100
+  });
+  flowControlledEcho("4", 100).then((data) => {
+    console.log("result 4", data, Date.now() - start); // 4 200.
+  });
+  flowControlledEcho("5", 100).then((data) => {
+    console.log("result 4", data, Date.now() - start); // 4 200.
+  }).catch((error) => {
+    console.log("result 5", error );
+  })
+  ;
+}
+
+main();
