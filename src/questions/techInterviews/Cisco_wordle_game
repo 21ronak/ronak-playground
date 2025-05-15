@@ -1,0 +1,166 @@
+import React from 'react'
+
+const Board = ({word}) => {
+  const [textInput, setTextInput] = React.useState('');
+  const [count, setCount] = React.useState(0);
+
+  const board = (
+    <div className="board">
+      <div className="row">
+        <div className="empty box"></div>
+        <div className="empty box"></div>
+        <div className="empty box"></div>
+        <div className="empty box"></div>
+        <div className="empty box"></div>
+      </div>
+    </div>
+  );
+
+    //  ready input correct/partially correct/incorrect
+  const wordCompare = () => {
+    const newRow = [];
+    // i { value, status }
+    textInput.split('').map((char, i) => {
+      if(char === word[i]) {
+        newRow.push({value: char, status: 'correct'});
+      } else if(word.includes(char)) {
+        newRow.push({value: char, status: 'partially correct'});
+      } else {
+        newRow.push({value: char, status: 'incorrect'});
+      }
+    });
+    return newRow;
+  };
+
+  const handleSubmit = () => {
+    if(textInput.length !==  word.length) {
+      return;
+    }
+    setCount((prev) => prev + 1);
+    if(count < 6) {
+      const newRow = wordCompare();
+      console.log('newRow =', newRow);
+
+    } else {
+      console.log('Too many attempts');
+    }
+  };
+
+  const input = (
+      <div>
+          <label htmlFor='user input'>Enter word: </label>
+          <input type='text' name='user input' value={textInput} onChange={(e) => setTextInput(e.target.value.trim())}></input>
+          <button type='button' onClick={handleSubmit}>Submit</button>
+        </div>
+  );
+  return (
+    <div>
+      {board}
+      {input}
+    </div>
+  )
+}
+
+export default Board;
+
+import React from 'react'
+import './App.css'
+import Board from './Board';
+
+// Helpful functions
+// Array.from({length: 5})
+// Math.random(10)
+
+const getRandomInt = (max) => {
+  return Math.floor(Math.random() * max);
+}
+const words = ['ready', 'aware', 'react', 'plane'];
+const word = 'ready';
+
+const App = (props) => {
+  return (
+    <div>
+      <div>{props.title}</div>
+      <Board word={word}/>
+    </div>
+  )
+}
+
+export default App
+
+
+
+
+
+
+
+body {
+  background: black;
+  color: white;
+  font: monospace;
+}
+
+.board {
+  width: 350px;
+  height: 420px;
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  grid-gap: 5px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 5px;
+}
+
+.box {
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
+  font-size: 2rem;
+  line-height: 2rem;
+  font-weight: bold;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.empty {
+  border: 2px solid #3a3a3c;
+}
+
+.green {
+  background: #538d4e;
+}
+
+.yellow {
+  background: #b59f3b;
+}
+
+.gray {
+  background: #3a3a3c;
+}
+
+Create the popular game Wordle from https://www.nytimes.com/games/wordle/index.html
+
+If you are not familiar with the game
+
+You get 6 guesses to guess a 5 letter word
+The game starts by showing a grid that can contain all of your possible guesses
+If you guess a word with a letter in the correct place, the background should be green
+If you guess a letter in the word but in the wrong place, the background should be yellow
+If you guess a letter that is not in the word, the background should be grey
+If you guess the 5 letter word in 6 guesses or less (all green letters), you win!
+Details and rubrik
+
+You will be given a basic text input box and a submit button
+You will be responsible for building the board and the guessing logic
+Grading will be based on the following from highest priority to lowest
+Complete the game
+Fixing some missing CSS
+Considering various edge cases
+Properly code functionality in the components it belongs in
+Discuss sticking points with your interviewer when needed
+Follow up questions may also be asked about your design

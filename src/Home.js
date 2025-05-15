@@ -28,6 +28,7 @@ const Home = () => {
         <li><Link to="/Stopwatch">Stopwatch</Link></li>
         <li><Link to="/WeatherWidget">WeatherWidget</Link></li>
         <li><Link to="/AutoComplete">AutoComplete</Link></li>
+        <li><Link to="/Wordle">Wordle</Link></li>
       </ul>
     </div>
   );

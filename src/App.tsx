@@ -24,6 +24,7 @@ import Stopwatch from './components/StopWatch';
 import CarousalTest from './components/Doordash_dogs/Carousal/CarousalTest';
 import WeatherWidget from './components/LocalWeatherAPI';
 import AutoComplete from './components/AutoComplete';
+import Wordle from './components/wordle/Wordle';
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
           <Route path="/Stopwatch" element={<Stopwatch />} />
           <Route path="/WeatherWidget" element={<WeatherWidget />} />
           <Route path="/AutoComplete" element={<AutoComplete />} />
+          <Route path="/Wordle" element={<Wordle />} />
         </Routes>
       </Router>
     </div>
